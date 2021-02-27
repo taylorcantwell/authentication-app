@@ -1,0 +1,9 @@
+CREATE TABLE profile (
+    id SERIAL PRIMARY KEY
+    photo VARCHAR(200),
+    name VARCHAR(50),
+    bio VARCHAR(250),
+    phone VARCHAR(15),
+    email VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(250) NOT NULL,
+)

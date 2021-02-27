@@ -9,12 +9,19 @@ import { ReactComponent as GithubIcon } from '../images/Github.svg';
 import { ReactComponent as TwitterIcon } from '../images/Facebook.svg';
 
 const Container = styled.div`
+    position: relative;
     border: 1px solid #bdbdbd;
     box-sizing: border-box;
     border-radius: 24px;
-    width: 473.83px;
-    height: 634.3px;
-    padding: 48px 58px;
+    width: 375px;
+    height: 676px;
+    padding: 17px 19px;
+
+    @media only screen and (min-width: 1000px) {
+        width: 473.83px;
+        height: 634.3px;
+        padding: 48px 58px;
+    }
 `;
 
 const Logo = styled(Devchallenges)`
@@ -79,6 +86,7 @@ const SubmitButton = styled.button`
     color: #ffffff;
     border: none;
     margin-bottom: 31px;
+    margin-top: 8px;
 `;
 
 const Info = styled.p`
@@ -92,7 +100,7 @@ const SocalIconContainer = styled.div`
     display: flex;
     justify-content: space-around;
     padding: 0 3rem;
-    margin-bottom: 22px;
+    margin-bottom: 27px;
 `;
 
 const LoginLink = styled.a`
@@ -103,8 +111,15 @@ const LoginLink = styled.a`
 const Footer = styled.div`
     display: flexbox;
     justify-content: space-between;
-    width: 473.83px;
-    padding: 12px 0;
+    width: 90%;
+    bottom: 2%;
+    position: absolute;
+
+    @media only screen and (min-width: 1000px) {
+        bottom: -5%;
+        left: 0;
+        width: 100%;
+    }
 `;
 
 const FooterText = styled.p`
@@ -159,16 +174,17 @@ const LoginCard = () => {
                 <Info>
                     Already a member? <LoginLink>Login</LoginLink>
                 </Info>
+                <Footer>
+                    <FooterText>
+                        created by <span>Taylor Cantwell</span>
+                    </FooterText>
+                    <FooterText>devChallenges.io</FooterText>
+                </Footer>
             </Container>
-
-            <Footer>
-                <FooterText>
-                    created by <span>Taylor Cantwell</span>
-                </FooterText>
-                <FooterText>devChallenges.io</FooterText>
-            </Footer>
         </>
     );
 };
 
 export default LoginCard;
+
+export { Footer, FooterText };
