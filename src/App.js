@@ -1,21 +1,29 @@
 import React from 'react';
-import store from './store';
+import { useSelector } from 'react-redux';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import ChangeInfoCard from './components/ChangeInfoCard';
+import Header from './components/Header';
 import LoginCard from './components/LoginCard';
 import ProfileCard from './components/ProfileCard';
-import Header from './components/Header';
-import ChangeInfoCard from './components/ChangeInfoCard';
 import GlobalStyles from './GlobalStyles';
-import { useSelector } from 'react-redux';
-const App = () => {
-    const isEditing = useSelector((state) => state.profile.editing);
 
+const App = () => {
+    const isAuthorized = useSelector((state) => state.authorization.authorized);
     return (
         <>
             <GlobalStyles />
             <Header />
-            {/* <LoginCard /> */}
-            {!isEditing && <ProfileCard />}
-            {isEditing && <ChangeInfoCard />}
+            <Switch>
+                <Route
+                    path="/"
+                    exact
+                    component={isAuthorized ? ProfileCard : LoginCard}
+                />
+                {!isAuthorized && <Redirect to="/" />}
+                <Route path="/profile" component={ProfileCard} />
+                <Route path="/profile-edit" exact component={ChangeInfoCard} />
+                <Route>Url doesn't exist</Route>
+            </Switch>
         </>
     );
 };

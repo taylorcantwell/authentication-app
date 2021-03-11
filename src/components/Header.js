@@ -67,7 +67,7 @@ const Header = () => {
                     }}
                 >
                     <Avatar src={'https://source.unsplash.com/random'} />
-                    <Name>Taylor Cantwell</Name>
+                    <Name>{false || 'Not specified'}</Name>
                     <Dropdown>
                         {isNavigationOpen ? (
                             <ArrowDropDownIcon />

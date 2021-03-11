@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import styled from 'styled-components';
-import { ReactComponent as Devchallenges } from '../images/devchallenges.svg';
-import { isEditing } from '../slices/profileSlice';
-import { useDispatch } from 'react-redux';
 
 export const SecondaryTitle = styled.h2`
     font-size: 24px;
@@ -57,49 +56,6 @@ export const InfoContainer = styled.div`
     }
 `;
 
-const Header = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const AvatarAndDropdownContainer = styled.div`
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-`;
-
-const Avatar = styled.img`
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-`;
-
-const Dropdown = styled.div`
-    display: none;
-    @media only screen and (min-width: 1000px) {
-        display: block;
-    }
-`;
-
-const Name = styled.p`
-    display: none;
-    @media only screen and (min-width: 1000px) {
-        display: block;
-        font-weight: bold;
-        font-size: 12px;
-        line-height: 16px;
-        letter-spacing: -0.035em;
-        color: #333333;
-        margin-right: 19px;
-        margin-left: 11px;
-    }
-`;
-
-const Logo = styled(Devchallenges)`
-    cursor: pointer;
-    margin-bottom: 27px;
-`;
-
 const ProfileSection = styled.div`
     display: flex;
     justify-content: space-between;
@@ -123,7 +79,10 @@ const Info = styled.p`
     }
 `;
 
-const EditButton = styled.button`
+const EditButton = styled(Link)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 95.34px;
     height: 38px;
     border: 1px solid #828282;
@@ -132,6 +91,7 @@ const EditButton = styled.button`
     letter-spacing: -0.035em;
     color: #828282;
     background-color: transparent;
+    text-decoration: none;
     cursor: pointer;
 `;
 
@@ -160,7 +120,7 @@ const Option = styled.p`
 /// !have to add a container around the image to control size and position easier
 const PhotoContainer = styled.div`
     @media only screen and (min-width: 1000px) {
-        flex-basis: 66%;
+        /* flex-basis: 66%; */
     }
 `;
 
@@ -177,8 +137,9 @@ const OptionEntry = styled.p`
     line-height: 22px;
     letter-spacing: -0.035em;
     color: #333333;
+    text-overflow: ellipsis;
     @media only screen and (min-width: 1000px) {
-        flex-basis: 66%;
+        /* flex-basis: 66%; */
         font-size: 18px;
     }
 `;
@@ -208,53 +169,60 @@ const FooterText = styled.p`
 `;
 
 const ProfileCard = () => {
-    // const [isEditing, toggleEdit] = useState(false);
+    // const [redirectOnEdit, setRedirectOnEdit] = useState(false);
     const dispatch = useDispatch();
-    const editButtonClickHandle = () => {
-        console.log('click register');
-        dispatch(isEditing());
-    };
+    const authState = useSelector((state) => state.authorization);
 
     return (
-        <Container>
-            <Title>Personal info</Title>
-            <Subtitle>Basic info, like your name and photo</Subtitle>
-            <InfoContainer>
-                <ProfileSection>
-                    <ProfileSectionCol1>
-                        <SecondaryTitle>Profile</SecondaryTitle>
-                        <Info>Some info may be visible to other people</Info>
-                    </ProfileSectionCol1>
-                    <EditButton onClick={editButtonClickHandle}>
-                        Edit
-                    </EditButton>
-                </ProfileSection>
-                <SectionPhoto>
-                    <Option>Photo</Option>
-                    <PhotoContainer>
-                        <OptionEntryPhoto />
-                    </PhotoContainer>
-                </SectionPhoto>
-                <Section>
-                    <Option>Name</Option> <OptionEntry>2</OptionEntry>
-                </Section>
-                <Section>
-                    <Option>Bio</Option> <OptionEntry>3</OptionEntry>
-                </Section>
-                <Section>
-                    <Option>Email</Option> <OptionEntry>4</OptionEntry>
-                </Section>
-                <Section>
-                    <Option>Password</Option> <OptionEntry>5</OptionEntry>
-                </Section>
-                <Footer>
-                    <FooterText>
-                        created by <span>Taylor Cantwell</span>
-                    </FooterText>
-                    <FooterText>devChallenges.io</FooterText>
-                </Footer>
-            </InfoContainer>
-        </Container>
+        <>
+            <Container>
+                <Title>Personal info</Title>
+                <Subtitle>Basic info, like your name and photo</Subtitle>
+                <InfoContainer>
+                    <ProfileSection>
+                        <ProfileSectionCol1>
+                            <SecondaryTitle>Profile</SecondaryTitle>
+                            <Info>
+                                Some info may be visible to other people
+                            </Info>
+                        </ProfileSectionCol1>
+                        <EditButton to="profile-edit">Edit</EditButton>
+                    </ProfileSection>
+                    <SectionPhoto>
+                        <Option>Photo</Option>
+                        <PhotoContainer>
+                            <OptionEntryPhoto />
+                        </PhotoContainer>
+                    </SectionPhoto>
+                    <Section>
+                        <Option>Name</Option>
+                        <OptionEntry>
+                            {authState.userInfo.name || 'Not specified'}
+                        </OptionEntry>
+                    </Section>
+                    <Section>
+                        <Option>Bio</Option>
+                        <OptionEntry>
+                            {authState.userInfo.bio || 'Not specified'}
+                        </OptionEntry>
+                    </Section>
+                    <Section>
+                        <Option>Email</Option>
+                        <OptionEntry>{authState.userInfo.email}</OptionEntry>
+                    </Section>
+                    <Section>
+                        <Option>Password</Option>
+                        <OptionEntry>{authState.userInfo.password}</OptionEntry>
+                    </Section>
+                    <Footer>
+                        <FooterText>
+                            created by <span>Taylor Cantwell</span>
+                        </FooterText>
+                        <FooterText>devChallenges.io</FooterText>
+                    </Footer>
+                </InfoContainer>
+            </Container>
+        </>
     );
 };
 

@@ -1,13 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { isEditing } from '../slices/profileSlice';
-import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import { ErrorMessage } from '@hookform/error-message';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import { useDispatch } from 'react-redux';
+import PhotoCameraIcon from '@material-ui/icons/PhotoCamera';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import formValidationOptions from '../util/formValidationOptions';
+import OnDrop from './OnDrop';
 
-//! maybe put header outside to App so it doesn't have to rerender
-
-const BackButton = styled.button`
+const BackButton = styled(Link)`
     font-size: 18px;
     line-height: 25px;
     letter-spacing: -0.035em;
@@ -83,44 +84,6 @@ export const ContentContainer = styled.form`
         margin: 0 auto;
         padding: 40px;
     }
-`;
-
-const Header = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const PhotoSection = styled.div`
-    display: flex;
-    align-items: center;
-    margin-bottom: 32px;
-`;
-
-const Photo = styled.div`
-    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
-        url('https://source.unsplash.com/random');
-    background-size: cover;
-    border-radius: 8px;
-    width: 72px;
-    height: 72px;
-    margin-right: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    &:hover,
-    &:focus {
-        filter: brightness(1.2);
-    }
-`;
-
-const PhotoText = styled.p`
-    text-transform: uppercase;
-    font-weight: 500;
-    font-size: 13px;
-    letter-spacing: -0.035em;
-    color: #828282;
-    cursor: pointer;
 `;
 
 const Label = styled.p`
@@ -204,47 +167,115 @@ const FooterText = styled.p`
 `;
 
 const ChangeInfoCard = () => {
-    const dispatch = useDispatch();
-    const backButtonClickHandle = () => {
-        dispatch(isEditing());
+    const [error, updateErrorMessage] = useState(null);
+    const { register, handleSubmit, errors } = useForm();
+    const onSubmitSuccess = async (data) => {
+        console.log(data);
+        // const response = await axios({
+        //     method: 'post',
+        //     url: 'http://localhost:4000/auth/update',
+        //     data: { data },
+        // });
     };
+
     return (
-        <Container>
-            <ContentContainer>
-                <Title>Change Info</Title>
-                <Subtitle>Changes will be reflected on every service</Subtitle>
-                <PhotoSection>
-                    <Photo>
-                        <PhotoCameraIcon style={{ color: 'white' }} />
-                    </Photo>
-                    <PhotoText>Change Photo</PhotoText>
-                    <BackButton onClick={backButtonClickHandle}>
+        <>
+            <Container>
+                <ContentContainer onSubmit={handleSubmit(onSubmitSuccess)}>
+                    <Title>Change Info</Title>
+                    <Subtitle>
+                        Changes will be reflected on every service
+                    </Subtitle>
+                    <OnDrop />
+                    <BackButton to="/profile">
                         <ArrowBackIosIcon style={{ fontSize: '18px' }} /> Back
                     </BackButton>
-                </PhotoSection>
-                <Label for="name">Name</Label>
-                <Input id="name" placeholder="Name" value=""></Input>
-                <Label for="bio">Bio</Label>
-                <BioInput id="bio" placeholder="Bio" as="textarea" value="" />
-                <Label for="phone">Phone</Label>
-                <Input
-                    id="phone"
-                    placeholder="Enter your phone..."
-                    value=""
-                ></Input>
-                <Label for="email">Email</Label>
-                <Input id="email" placeholder="Email" value=""></Input>
-                <Label for="password">Password</Label>
-                <Input id="password" placeholder="Password" value=""></Input>
-                <Savebutton>Save</Savebutton>
-                <Footer>
-                    <FooterText>
-                        created by <span>Taylor Cantwell</span>
-                    </FooterText>
-                    <FooterText>devChallenges.io</FooterText>
-                </Footer>
-            </ContentContainer>
-        </Container>
+                    <ErrorMessage
+                        style={{ color: 'red', fontSize: '14px' }}
+                        errors={errors}
+                        name="name"
+                        as="p"
+                    />
+                    <Label for="name">Name</Label>
+                    <Input
+                        id="name"
+                        placeholder="Name"
+                        name="name"
+                        type="text"
+                        ref={register(formValidationOptions.name)}
+                        onChange={() => updateErrorMessage(null)}
+                    ></Input>
+                    <ErrorMessage
+                        style={{ color: 'red', fontSize: '14px' }}
+                        errors={errors}
+                        name="bio"
+                        as="p"
+                    />
+                    <Label for="bio">Bio</Label>
+                    <BioInput
+                        id="bio"
+                        placeholder="Bio"
+                        name="bio"
+                        as="textarea"
+                        type="textarea"
+                        ref={register(formValidationOptions.bio)}
+                        onChange={() => updateErrorMessage(null)}
+                    />
+                    <ErrorMessage
+                        style={{ color: 'red', fontSize: '14px' }}
+                        errors={errors}
+                        name="phone"
+                        as="p"
+                    />
+                    <Label for="phone">Phone</Label>
+                    <Input
+                        id="phone"
+                        placeholder="Enter your phone..."
+                        name="phone"
+                        type="text"
+                        ref={register(formValidationOptions.phone)}
+                        onChange={() => updateErrorMessage(null)}
+                    ></Input>
+                    <ErrorMessage
+                        style={{ color: 'red', fontSize: '14px' }}
+                        errors={errors}
+                        name="emailUpdate"
+                        as="p"
+                    />
+                    <Label for="emailUpdate">Email</Label>
+                    <Input
+                        id="emailUpdate"
+                        placeholder="Email"
+                        name="emailUpdate"
+                        type="text"
+                        ref={register(formValidationOptions.emailUpdate)}
+                        onChange={() => updateErrorMessage(null)}
+                    ></Input>
+                    <ErrorMessage
+                        style={{ color: 'red', fontSize: '14px' }}
+                        errors={errors}
+                        name="passwordUpdate"
+                        as="p"
+                    />
+                    <Label for="passwordUpdate">Password</Label>
+                    <Input
+                        id="passwordUpdate"
+                        placeholder="Password"
+                        name="passwordUpdate"
+                        type="text"
+                        ref={register(formValidationOptions.passwordUpdate)}
+                        onChange={() => updateErrorMessage(null)}
+                    ></Input>
+                    <Savebutton type="submit">Save</Savebutton>
+                    <Footer>
+                        <FooterText>
+                            created by <span>Taylor Cantwell</span>
+                        </FooterText>
+                        <FooterText>devChallenges.io</FooterText>
+                    </Footer>
+                </ContentContainer>
+            </Container>
+        </>
     );
 };
 

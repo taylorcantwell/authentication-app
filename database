@@ -1,9 +1,11 @@
 CREATE TABLE profile (
     id SERIAL PRIMARY KEY
+    google_id VARCHAR(200),
     photo VARCHAR(200),
     name VARCHAR(50),
     bio VARCHAR(250),
     phone VARCHAR(15),
-    email VARCHAR(50) UNIQUE NOT NULL,
-    password VARCHAR(250) NOT NULL,
+    email VARCHAR(50) UNIQUE,
+    password VARCHAR(250),
+    password_update_date DATE
 )

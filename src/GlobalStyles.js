@@ -15,6 +15,7 @@ const GlobalStyles = createGlobalStyle`
         line-height: 1.6;
         font-family: 'Noto Sans', sans-serif; 
         letter-spacing: -0.035em;
+        overflow: scroll;
     }
 
     input,
